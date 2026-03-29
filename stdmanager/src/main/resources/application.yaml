@@ -1,3 +1,26 @@
+server:
+  port: ${SERVER_PORT:8080}
+
 spring:
   application:
     name: stdmanager
+
+  datasource:
+    url: jdbc:sqlserver://localhost:${DB_PORT:1433};databaseName=stdmanager_db;trustServerCertificate=true
+    username: sa
+    password: ${MSSQL_SA_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate # Sử dụng Flyway để quản lý bảng, không dùng hibernate tạo tự động
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.SQLServerDialect
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration

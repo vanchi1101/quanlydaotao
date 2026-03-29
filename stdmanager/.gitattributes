@@ -1,2 +1,8 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+* text=auto
+
+
+# Giữ nguyên định dạng cho các file thực thi
+*.sh text eol=lf
+*.bat text eol=crlf
