@@ -101,7 +101,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-[50px] bg-[#3B82F6] text-white text-base font-semibold rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+            className="w-full h-12.5 bg-[#3B82F6] text-white text-base font-semibold rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
           >
             {isLoading && <Loader2 className="animate-spin" size={20} />}
             Login
@@ -118,8 +118,8 @@ const Login = () => {
         {/* Footer Guide Section */}
         <div className="mt-auto pt-10">
           <h3 className="text-[24px] font-bold text-[#166534] mb-4">Hướng dẫn cho Sinh viên</h3>
-          <div className="border border-[#E5E7EB] rounded-[12px] p-6 bg-white">
-            <p className="text-[15px] font-medium text-[#4B5563] mb-3">Sinh viên phải tuân thủ:</p>
+          <div className="border border-[#E5E7EB] rounded-xl p-6 bg-white">
+            <p className="text-[19px] font-medium text-[#4B5563] mb-3">Sinh viên phải tuân thủ:</p>
             <ul className="space-y-2 text-[15px] text-[#4B5563] leading-6">
               <li className="flex gap-2"><span>1.</span> Đăng nhập để học trực tuyến.</li>
               <li className="flex gap-2"><span>2.</span> Không cho mượn tài khoản bất kỳ hình thức nào.</li>
@@ -135,10 +135,10 @@ const Login = () => {
       </div>
 
       {/* RIGHT SIDE: ILLUSTRATION PLACEHOLDER */}
-      <div className="hidden md:block md:w-1/2 bg-[#F3F4F6] relative overflow-hidden">
+      <div className="hidden md:block md:w-1/2 bg-[#FFF] relative overflow-hidden">
         {/* Placeholder cho ảnh minh họa */}
         <div className="absolute inset-0 flex items-center justify-center text-gray-400 font-medium">
-          [ Minh họa hệ thống quản lý ]
+          <img src="../public/donga_logo.jpg" alt="" />
         </div>
         {/* Hi ứng trang trí (tùy chọn) */}
         <div className="absolute top-1/4 right-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
