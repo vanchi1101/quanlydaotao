@@ -17,24 +17,24 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Role extends BaseEntity {
+public class RoleAuth extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 50)
-    private String code; // Ví dụ: ADMIN, GIANGVIEN 
+    private String code; // Ví dụ: ADMIN, GIANGVIEN
 
     @Column(nullable = false, length = 100)
-    private String name; // Ví dụ: Quản trị viên 
+    private String name; // Ví dụ: Quản trị viên
 
     @Column(length = 255)
     private String description;
 
     @Builder.Default // Thêm annotation này để giữ giá trị mặc định khi dùng Builder
     @Column(name = "is_system")
-    private Boolean isSystem = false; // Vai trò hệ thống không được xóa 
+    private Boolean isSystem = false; // Vai trò hệ thống không được xóa
 
     @Builder.Default // Khởi tạo tập hợp trống để tránh null khi build
     @OneToMany(mappedBy = "role")
     @JsonIgnore // Ngắt vòng lặp tại đây
     @Schema(hidden = true) // Thêm dòng này
-    private Set<UserRole> userRoles = new HashSet<>();
+    private Set<UserRoleAuth> userRoles = new HashSet<>();
 }

@@ -6,13 +6,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uni.it.stdmanager.modules.i_auth.repository.UserRepository;
+import uni.it.stdmanager.modules.i_auth.repository.UserRepositoryAuth;
 
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryAuth userRepository;
 
     @Override
     @Transactional(readOnly = true)

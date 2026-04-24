@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User extends BaseEntity {
+public class UserAuth extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 50)
     private String username;
@@ -43,5 +43,5 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore // Thêm annotation này để Swagger không quét ngược lại
     @Schema(hidden = true)
-    private Set<UserRole> userRoles;
+    private Set<UserRoleAuth> userRoles;
 }

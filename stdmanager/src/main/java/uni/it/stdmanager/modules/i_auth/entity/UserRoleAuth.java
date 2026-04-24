@@ -14,15 +14,15 @@ import uni.it.stdmanager.core.entity.BaseEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserRole extends BaseEntity {
+public class UserRoleAuth extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore // Ngắt việc quét ngược lại User để tránh lỗi 500 và vòng lặp
     @Schema(hidden = true) // Thêm dòng này
-    private User user;
+    private UserAuth user;
 
     @ManyToOne(fetch = FetchType.EAGER) // Giữ EAGER để lấy quyền ngay lập tức
     @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
+    private RoleAuth role;
 }

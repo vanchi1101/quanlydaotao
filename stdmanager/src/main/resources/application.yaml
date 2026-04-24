@@ -8,9 +8,9 @@ spring:
   datasource:
     url: jdbc:sqlserver://localhost:${DB_PORT:1433};databaseName=stdmanager_db;trustServerCertificate=true
     username: sa
-    password: P@ssword;
+    password: 749516
     # Hibernate 6 tự nhận diện Driver, không nhất thiết phải khai báo thủ công
-  
+
   jpa:
     open-in-view: false # Tắt OSIV để tránh lãng phí kết nối và lỗi tiềm ẩn
     hibernate:
@@ -32,7 +32,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
   packages-to-scan: uni.it.stdmanager.modules # Giới hạn vùng quét để tránh lỗi 500
-
 
 logging:
   level:

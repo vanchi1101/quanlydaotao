@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import uni.it.stdmanager.modules.i_auth.entity.User;
+import uni.it.stdmanager.modules.i_auth.entity.UserAuth;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
     @Getter
-    private final User user;
+    private final UserAuth user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -24,20 +24,32 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
-    public String getPassword() { return user.getPasswordHash(); }
+    public String getPassword() {
+        return user.getPasswordHash();
+    }
 
     @Override
-    public String getUsername() { return user.getUsername(); }
+    public String getUsername() {
+        return user.getUsername();
+    }
 
     @Override
-    public boolean isAccountNonExpired() { return true; }
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isAccountNonLocked() { return user.getIsActive(); }
+    public boolean isAccountNonLocked() {
+        return user.getIsActive();
+    }
 
     @Override
-    public boolean isCredentialsNonExpired() { return true; }
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isEnabled() { return user.getIsActive(); }
+    public boolean isEnabled() {
+        return user.getIsActive();
+    }
 }
