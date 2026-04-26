@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:sqlserver://localhost:${DB_PORT:1433};databaseName=stdmanager_db;trustServerCertificate=true
     username: sa
-    password: 749516
+    password: ${MSSQL_SA_PASSWORD:12345}
     # Hibernate 6 tự nhận diện Driver, không nhất thiết phải khai báo thủ công
 
   jpa:

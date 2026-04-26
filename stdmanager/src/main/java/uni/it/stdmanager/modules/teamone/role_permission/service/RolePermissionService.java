@@ -26,6 +26,8 @@ public interface RolePermissionService {
 
     Page<RolePermission> searchByRoleId(UUID roleId, Pageable pageable);
 
+    List<RolePermission> getByIsActive(Boolean isActive);
+
     RolePermission lock(UUID id);
 
     RolePermission unlock(UUID id);

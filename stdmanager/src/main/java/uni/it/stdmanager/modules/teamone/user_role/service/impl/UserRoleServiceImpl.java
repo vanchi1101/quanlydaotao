@@ -25,7 +25,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public Page<UserRole> getAll(Pageable pageable) {
-        return repository.findAll(pageable);
+        return repository.findByDeletedAtIsNull(pageable);
     }
 
     @Override
@@ -69,17 +69,17 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> getUsersByRole(UUID roleId) {
-        return repository.findByRoleId(roleId);
+        return repository.findByRoleIdAndDeletedAtIsNull(roleId);
     }
 
     @Override
     public Page<UserRole> searchByUserId(UUID userId, Pageable pageable) {
-        return repository.findByIsActive(true, pageable); // có thể tinh chỉnh query
+        return repository.findByIsActiveAndDeletedAtIsNull(true, pageable); // có thể tinh chỉnh query
     }
 
     @Override
     public List<UserRole> getByIsActive(Boolean isActive) {
-        return repository.findByIsActive(isActive);
+        return repository.findByIsActiveAndDeletedAtIsNull(isActive);
     }
 
     @Override

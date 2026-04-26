@@ -13,13 +13,15 @@ import java.util.UUID;
 
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, UUID> {
-    Page<UserRole> findAll(Pageable pageable);
-
     List<UserRole> findByIsActiveTrue();
 
     List<UserRole> findByIsActive(Boolean isActive);
 
     Page<UserRole> findByIsActive(Boolean isActive, Pageable pageable);
+
+    List<UserRole> findByDeletedAtIsNull();
+
+    Page<UserRole> findByDeletedAtIsNull(Pageable pageable);
 
     List<UserRole> findByUserId(UUID userId);
 
@@ -27,4 +29,10 @@ public interface UserRoleRepository extends JpaRepository<UserRole, UUID> {
 
     @Query("SELECT ur FROM UserRole ur WHERE ur.userId = :userId AND ur.deletedAt IS NULL")
     List<UserRole> findActiveRolesByUserId(UUID userId);
+
+    List<UserRole> findByIsActiveAndDeletedAtIsNull(Boolean isActive);
+
+    Page<UserRole> findByIsActiveAndDeletedAtIsNull(Boolean isActive, Pageable pageable);
+
+    List<UserRole> findByRoleIdAndDeletedAtIsNull(UUID roleId);
 }

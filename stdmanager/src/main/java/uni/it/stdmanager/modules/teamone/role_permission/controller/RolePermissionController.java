@@ -74,6 +74,11 @@ public class RolePermissionController {
         return service.searchByRoleId(roleId, PageRequest.of(page, size));
     }
 
+    @GetMapping("/active")
+    public List<RolePermission> getByIsActive(@RequestParam Boolean isActive) {
+        return service.getByIsActive(isActive);
+    }
+
     @PutMapping("/{id}/lock")
     public RolePermission lock(@PathVariable UUID id) {
         return service.lock(id);

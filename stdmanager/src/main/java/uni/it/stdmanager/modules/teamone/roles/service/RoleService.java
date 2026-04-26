@@ -34,6 +34,9 @@ public class RoleService {
         role.setCode(roleData.getCode());
         role.setName(roleData.getName());
         role.setDescription(roleData.getDescription());
+        if (roleData.getIsSystem() != null) {
+            role.setIsSystem(roleData.getIsSystem());
+        }
 
         return roleRepository.save(role);
     }

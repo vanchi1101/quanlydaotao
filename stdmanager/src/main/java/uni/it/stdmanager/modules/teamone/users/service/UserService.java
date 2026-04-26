@@ -5,7 +5,12 @@ import uni.it.stdmanager.modules.teamone.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,11 +53,44 @@ public class UserService {
         if (userData.getPhone() != null) {
             user.setPhone(userData.getPhone());
         }
+        if (userData.getAvatarUrl() != null) {
+            user.setAvatarUrl(userData.getAvatarUrl());
+        }
         if (userData.getIsActive() != null) {
             user.setIsActive(userData.getIsActive());
         }
 
         return userRepository.save(user);
+    }
+
+    public User updateAvatar(UUID id, MultipartFile file) {
+        User user = userRepository.findByIdAndDeletedAtIsNull(id).orElseThrow();
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("File ảnh đại diện không được rỗng");
+        }
+
+        try {
+            Path avatarDir = Paths.get("uploads", "avatars");
+            Files.createDirectories(avatarDir);
+
+            String originalFilename = file.getOriginalFilename();
+            String extension = "";
+            if (originalFilename != null) {
+                int dotIndex = originalFilename.lastIndexOf('.');
+                if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
+                    extension = originalFilename.substring(dotIndex);
+                }
+            }
+
+            String filename = UUID.randomUUID().toString() + extension;
+            Path targetFile = avatarDir.resolve(filename);
+            Files.copy(file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
+
+            user.setAvatarUrl("/uploads/avatars/" + filename);
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Không thể lưu ảnh đại diện", e);
+        }
     }
 
     public void deleteUser(UUID id) {

@@ -34,14 +34,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Kích hoạt cấu hình CORS
+                        // 1. Kích hoạt cấu hình CORS
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/favicon.ico").permitAll()
-                .anyRequest().authenticated()
-            );
+            //             .authorizeHttpRequests(auth -> auth
+            //     .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/favicon.ico").permitAll()
+            //     .anyRequest().authenticated()
+            // );
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
         // Thêm JWT Filter trước UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

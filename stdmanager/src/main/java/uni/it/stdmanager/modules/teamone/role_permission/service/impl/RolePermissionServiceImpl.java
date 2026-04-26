@@ -25,7 +25,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public Page<RolePermission> getAll(Pageable pageable) {
-        return repository.findAll(pageable);
+        return repository.findByDeletedAtIsNull(pageable);
     }
 
     @Override
@@ -36,14 +36,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public RolePermission assignPermission(UUID roleId, UUID permissionId) {
-        // Kiểm tra trùng lặp (nếu cần có thể thêm validation)
         RolePermission rp = new RolePermission();
         rp.setId(UUID.randomUUID());
         rp.setRoleId(roleId);
         rp.setPermissionId(permissionId);
         rp.setCreatedAt(LocalDateTime.now());
         rp.setIsActive(true);
-        // created_by = null hoặc lấy từ SecurityContext nếu có authentication
         return repository.save(rp);
     }
 
@@ -53,7 +51,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         if (updateData.getPermissionId() != null) {
             existing.setPermissionId(updateData.getPermissionId());
         }
-        // Có thể cập nhật roleId nếu cần, nhưng thường ít thay đổi
         existing.setUpdatedAt(LocalDateTime.now());
         return repository.save(existing);
     }
@@ -63,7 +60,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         RolePermission rp = getById(id);
         rp.setDeletedAt(LocalDateTime.now());
         rp.setIsActive(false);
-        // deleted_by = null hoặc từ SecurityContext
         repository.save(rp);
     }
 
@@ -79,9 +75,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public Page<RolePermission> searchByRoleId(UUID roleId, Pageable pageable) {
-        // Có thể tinh chỉnh query nếu cần filter theo roleId
-        // Hiện tại dùng findAll + filter trong service hoặc custom query
-        return repository.findAll(pageable); // hoặc implement custom nếu cần
+        return repository.findByRoleIdAndDeletedAtIsNull(roleId, pageable);
+    }
+
+    @Override
+    public List<RolePermission> getByIsActive(Boolean isActive) {
+        return repository.findByIsActiveAndDeletedAtIsNull(isActive);
     }
 
     @Override
