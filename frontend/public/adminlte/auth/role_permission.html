@@ -25,6 +25,10 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="../css/adminlte.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css"
+      rel="stylesheet"
+    />
     <style>
       .sidebar-menu .nav-link {
         transition: none !important;
@@ -207,12 +211,11 @@
                 <table class="table table-hover align-middle text-nowrap mb-0">
                   <thead class="table-light">
                     <tr>
-                      <th style="width: 24%">ID</th>
-                      <th style="width: 18%">Role</th>
-                      <th style="width: 18%">Permission</th>
-                      <th style="width: 16%">Trạng thái</th>
-                      <th style="width: 14%">Created at</th>
-                      <th style="width: 10%" class="text-end">Hành động</th>
+                      <th style="width: 25%">Role</th>
+                      <th style="width: 25%">Permission</th>
+                      <th style="width: 15%">Trạng thái</th>
+                      <th style="width: 20%">Created at</th>
+                      <th style="width: 15%" class="text-end">Hành động</th>
                     </tr>
                   </thead>
                   <tbody id="rolePermissionTableBody"></tbody>
@@ -329,6 +332,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="../js/adminlte.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
@@ -354,6 +358,10 @@
         let allPermissions = [];
         let rolesById = {};
         let permissionsById = {};
+        let tsRole = null;
+        let tsPermission = null;
+        let tsFilterRole = null;
+        let tsFilterPermission = null;
 
         const rolePermissionTableBody = document.getElementById('rolePermissionTableBody');
         const pagination = document.getElementById('pagination');
@@ -391,6 +399,13 @@
         var rolePermissionDetailModal = null;
         if (window.bootstrap && rolePermissionDetailModalEl) {
           rolePermissionDetailModal = new window.bootstrap.Modal(rolePermissionDetailModalEl);
+        }
+
+        if (window.TomSelect) {
+          if (roleIdSelect) tsRole = new TomSelect(roleIdSelect, { create: false });
+          if (permissionIdSelect) tsPermission = new TomSelect(permissionIdSelect, { create: false });
+          if (filterRoleSelect) tsFilterRole = new TomSelect(filterRoleSelect, { create: false });
+          if (filterPermissionSelect) tsFilterPermission = new TomSelect(filterPermissionSelect, { create: false });
         }
 
         function highlightText(text, term) {
@@ -472,13 +487,21 @@
             if (p && p.id) permissionsById[String(p.id).toLowerCase()] = p;
           });
 
-          setSelectOptions(roleIdSelect, allRoles, 'Chọn role', function (r) {
+          const activeRoles = allRoles.filter(function(r) {
+            return getIsActive(r) !== false;
+          });
+
+          setSelectOptions(roleIdSelect, activeRoles, 'Chọn role', function (r) {
             return r.id;
           }, function (r) {
             return (r.name || r.code || r.id) + (r.code ? ' (' + r.code + ')' : '');
           });
 
-          setSelectOptions(permissionIdSelect, allPermissions, 'Chọn permission', function (p) {
+          const activePermissions = allPermissions.filter(function(p) {
+            return getIsActive(p) !== false;
+          });
+
+          setSelectOptions(permissionIdSelect, activePermissions, 'Chọn permission', function (p) {
             return p.id;
           }, function (p) {
             return (p.name || p.code || p.id) + (p.code ? ' (' + p.code + ')' : '');
@@ -496,6 +519,12 @@
           }, function (p) {
             return (p.name || p.code || p.id) + (p.code ? ' (' + p.code + ')' : '');
           });
+
+          // Sync Tom Select
+          if (tsRole) tsRole.sync();
+          if (tsPermission) tsPermission.sync();
+          if (tsFilterRole) tsFilterRole.sync();
+          if (tsFilterPermission) tsFilterPermission.sync();
         }
 
         async function loadLookups() {
@@ -542,9 +571,6 @@
                 '<tr class="role-permission-row" data-id="' +
                 r.id +
                 '">' +
-                '<td>' +
-                highlightText(r.id || '', term) +
-                '</td>' +
                 '<td>' +
                 highlightText(roleLabel, term) +
                 '</td>' +
@@ -791,6 +817,8 @@
           rolePermissionIdInput.value = '';
           roleIdSelect.value = '';
           permissionIdSelect.value = '';
+          if (tsRole) tsRole.sync();
+          if (tsPermission) tsPermission.sync();
           rolePermissionModalTitle.textContent = 'Thêm role permission';
           btnSaveRolePermission.dataset.mode = 'create';
           rolePermissionModal.show();
@@ -802,6 +830,8 @@
           rolePermissionIdInput.value = rolePermission.id || '';
           roleIdSelect.value = rolePermission.roleId || '';
           permissionIdSelect.value = rolePermission.permissionId || '';
+          if (tsRole) tsRole.sync();
+          if (tsPermission) tsPermission.sync();
           rolePermissionModalTitle.textContent = 'Cập nhật role permission';
           btnSaveRolePermission.dataset.mode = 'update';
           rolePermissionModal.show();

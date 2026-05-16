@@ -104,7 +104,7 @@
               data-accordion="false"
             >
               <li class="nav-item px-3">
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 mb-2">
                   <span class="text-white small mb-0 fw-semibold">Auth</span>
                   <span class="badge text-bg-light">Admin</span>
                 </div>
@@ -452,14 +452,10 @@
                 '</td>' +
                 '<td class="text-end">' +
                 lockAction +
-                '<button class="btn btn-sm btn-outline-secondary me-1" data-id="' +
-                r.id +
-                '" data-action="edit">' +
+                '<button class="btn btn-sm btn-outline-secondary me-1" data-id="' + r.id + '" data-action="edit">' +
                 '<i class="bi bi-pencil"></i>' +
                 '</button>' +
-                '<button class="btn btn-sm btn-outline-danger" data-id="' +
-                r.id +
-                '" data-action="delete">' +
+                '<button class="btn btn-sm btn-outline-danger" data-id="' + r.id + '" data-action="delete">' +
                 '<i class="bi bi-trash"></i>' +
                 '</button>' +
                 '</td>' +
@@ -787,6 +783,12 @@
             } else if (action === 'unlock') {
               unlockRole(id);
             } else if (action === 'delete') {
+              const row = e.target.closest('tr.role-row');
+              const roleInList = row ? allRoles.find(function(r) { return String(r.id) === String(id); }) : null;
+              if (roleInList && getRoleSystemValue(roleInList)) {
+                alert('Đây là role mặc định của hệ thống không thể xóa');
+                return;
+              }
               if (confirm('Bạn có chắc chắn muốn xóa role này?')) {
                 deleteRole(id);
               }
@@ -837,6 +839,11 @@
 
           const isUpdate = mode === 'update';
           const id = roleIdInput.value;
+
+          if (isUpdate && isSystem && getRoleSystemValue(currentEditingRole)) {
+            alert('Đây là role mặc định của hệ thống, không thể sửa');
+            return;
+          }
 
           const payload = {
             code: code,
