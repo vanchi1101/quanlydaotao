@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../store/useAuthStore';
 
 // Cấu hình URL mặc định. Sử dụng biến môi trường của Vite nếu có.
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://quanlyphanquyen-v1.onrender.com';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     // Lấy token trực tiếp từ Zustand Store
     const token = useAuthStore.getState().accessToken;
-    
+
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -36,15 +36,15 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     const { response } = error;
-    
+
     if (response) {
       const status = response.status;
-      
+
       if (status === 401) {
         // Lỗi 401: Token hết hạn hoặc không hợp lệ -> Xóa state và đẩy về trang đăng nhập
         console.warn('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.');
         useAuthStore.getState().logout();
-        window.location.href = '/login'; 
+        window.location.href = '/login';
       } else if (status === 403) {
         // Lỗi 403: Có token nhưng không đủ quyền (Ví dụ: Sinh viên vào trang Admin)
         console.error('Bạn không có quyền truy cập tài nguyên này.');
@@ -52,7 +52,7 @@ axiosInstance.interceptors.response.use(
     } else {
       console.error('Không thể kết nối đến Server.');
     }
-    
+
     return Promise.reject(error);
   }
 );
