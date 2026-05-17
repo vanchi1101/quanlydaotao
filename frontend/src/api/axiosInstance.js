@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../store/useAuthStore';
 
 // Cấu hình URL mặc định. Sử dụng biến môi trường của Vite nếu có.
-const BASE_URL = 'https://quanlyphanquyen-v1.onrender.com/';
+const BASE_URL = 'https://quanlyphanquyen-v1.onrender.com';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
