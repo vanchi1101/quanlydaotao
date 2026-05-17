@@ -1,42 +1,92 @@
+# server:
+#   port: ${SERVER_PORT:8080}
+
+# spring:
+#   application:
+#     name: stdmanager
+
+#   datasource:
+#     url: jdbc:sqlserver://localhost:${DB_PORT:1433};databaseName=stdmanager_db;trustServerCertificate=true
+#     username: sa
+#     password: 749516
+#     # Hibernate 6 tự nhận diện Driver, không nhất thiết phải khai báo thủ công
+
+#   jpa:
+#     open-in-view: false # Tắt OSIV để tránh lãng phí kết nối và lỗi tiềm ẩn
+#     hibernate:
+#       ddl-auto: validate # Sử dụng Flyway quản lý schema
+#     show-sql: true
+#     properties:
+#       hibernate:
+#         format_sql: true # Định dạng SQL cho dễ đọc trong log
+
+#   flyway:
+#     enabled: true
+#     baseline-on-migrate: true
+#     locations: classpath:db/migration
+
+# # Cấu hình SpringDoc để Swagger hoạt động ổn định
+# springdoc:
+#   api-docs:
+#     path: /v3/api-docs
+#   swagger-ui:
+#     path: /swagger-ui.html
+#   packages-to-scan: uni.it.stdmanager.modules # Giới hạn vùng quét để tránh lỗi 500
+
+# logging:
+#   level:
+#     root: INFO
+#     org.springdoc: DEBUG
+#     io.swagger: DEBUG
+#     org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Xem giá trị tham số SQL
+#     org.springframework.web: DEBUG # Xem chi tiết luồng Request/Response
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:8080}
 
 spring:
   application:
     name: stdmanager
 
   datasource:
-    url: jdbc:sqlserver://localhost:${DB_PORT:1433};databaseName=stdmanager_db;trustServerCertificate=true
-    username: sa
-    password: ${MSSQL_SA_PASSWORD:12345}
-    # Hibernate 6 tự nhận diện Driver, không nhất thiết phải khai báo thủ công
+    url: jdbc:postgresql://ep-long-moon-apvxscfy-pooler.c-7.us-east-1.aws.neon.tech/stdmanager_db?sslmode=require&channelBinding=require
+    username: authenticator
+    password: npg_nFvB2XIMr9Pm
+    driver-class-name: org.postgresql.Driver
 
   jpa:
-    open-in-view: false # Tắt OSIV để tránh lãng phí kết nối và lỗi tiềm ẩn
+    open-in-view: false
+
     hibernate:
-      ddl-auto: validate # Sử dụng Flyway quản lý schema
+      ddl-auto: update
+
     show-sql: true
+
+    defer-datasource-initialization: true
+
     properties:
       hibernate:
-        format_sql: true # Định dạng SQL cho dễ đọc trong log
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  sql:
+    init:
+      mode: always
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
-    locations: classpath:db/migration
+    enabled: false
 
-# Cấu hình SpringDoc để Swagger hoạt động ổn định
 springdoc:
   api-docs:
     path: /v3/api-docs
+
   swagger-ui:
     path: /swagger-ui.html
-  packages-to-scan: uni.it.stdmanager.modules # Giới hạn vùng quét để tránh lỗi 500
+
+  packages-to-scan: uni.it.stdmanager.modules
 
 logging:
   level:
     root: INFO
     org.springdoc: DEBUG
     io.swagger: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Xem giá trị tham số SQL
-    org.springframework.web: DEBUG # Xem chi tiết luồng Request/Response
+    org.springframework.web: DEBUG
